@@ -1,0 +1,166 @@
+= Heroku deployment
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+== Preparation
+```
+heroku login
+git init
+git add .
+git commit -m "first commit"
+```
+
+In order to deploy to Heroku, you’ll first need to provision a new Heroku app.
+
+== Creating VM (application)
+
+```
+heroku create
+Creating app... done, ⬢ rocky-beyond-19144
+https://rocky-beyond-19144.herokuapp.com/ | https://git.heroku.com/rocky-beyond-19144.git
+```
+
+```
+git push heroku master
+Counting objects: 36, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (23/23), done.
+Writing objects: 100% (36/36), 55.09 KiB | 9.18 MiB/s, done.
+Total 36 (delta 2), reused 0 (delta 0)
+remote: Compressing source files... done.
+remote: Building source:
+remote:
+remote: -----> Gradle app detected
+remote: -----> Spring Boot detected
+remote: -----> Installing JDK 11... done
+remote: -----> Building Gradle app...
+remote: -----> executing ./gradlew build -x test
+remote:        Downloading https://services.gradle.org/distributions/gradle-5.2.1-all.zip
+remote:        ..............................................................................................................................
+remote:        To honour the JVM settings for this build a new JVM will be forked. Please consider using the daemon: https://docs.gradle.org/5.2.1/userguide/gradle_daemon.html.
+remote:        Daemon will be stopped at the end of the build stopping after processing
+remote:        > Task :compileJava
+remote:        > Task :processResources
+remote:        > Task :classes
+remote:        > Task :bootJar
+remote:        > Task :jar SKIPPED
+remote:        > Task :assemble
+remote:        > Task :check
+remote:        > Task :build
+remote:
+remote:        BUILD SUCCESSFUL in 48s
+remote:        3 actionable tasks: 3 executed
+remote: -----> Discovering process types
+remote:        Procfile declares types     -> (none)
+remote:        Default types for buildpack -> web
+remote:
+remote: -----> Compressing...
+remote:        Done: 74.8M
+remote: -----> Launching...
+remote:        Released v3
+remote:        https://rocky-beyond-19144.herokuapp.com/ deployed to Heroku
+remote:
+remote: Verifying deploy... done.
+To https://git.heroku.com/rocky-beyond-19144.git
+ * [new branch]      master -> master
+```
+
+If application has been deleted, you must reconfigure remote branch in local git.
+
+```
+heroku create
+Creating app... done, ⬢ hidden-caverns-12789
+https://hidden-caverns-12789.herokuapp.com/ | https://git.heroku.com/hidden-caverns-12789.git
+
+git remote -v
+heroku	https://git.heroku.com/rocky-beyond-19144.git (fetch)
+heroku	https://git.heroku.com/rocky-beyond-19144.git (push)
+
+git remote set-url heroku https://git.heroku.com/hidden-caverns-12789.git
+git remote -v
+heroku	https://git.heroku.com/hidden-caverns-12789.git (fetch)
+heroku	https://git.heroku.com/hidden-caverns-12789.git (push)
+```
+
+
+The application is now deployed.
+You can visit the app’s URL by running this command:
+
+=== Application: open, view, stop
+
+To open application you can do:
+
+```
+heroku open
+```
+
+```
+heroku logs --tail
+```
+
+```
+heroku stop rocky-beyond-19144
+Stopping rocky-beyond-19144 dynos on ⬢ rocky-beyond-19144... done
+```
+
+=== Configuration management
+
+Heroku config commands of the Heroku CLI makes it easy to manage your app’s config vars.
+
+View current config var values
+```
+heroku config
+GITHUB_USERNAME: joesmith
+OTHER_VAR:    production
+
+heroku config:get GITHUB_USERNAME
+joesmith
+```
+
+Set a config var
+
+```
+heroku config:set GITHUB_USERNAME=joesmith
+Adding config vars and restarting myapp... done, v12
+GITHUB_USERNAME: joesmith
+```
+
+Remove a config var
+```
+heroku config:unset GITHUB_USERNAME
+Unsetting GITHUB_USERNAME and restarting myapp... done, v13
+```
+
+...or you can use Heroku dashboard for visual setup.
+
+=== Application manifest
+
+Helps setup application in less error-prone way.
+
+
+```
+{
+  "name": "Heroku demo app",
+  "description": "Heroku demo application with 2 spring profiles: simple and static",
+  "website": "",
+  "success_url": "/app",
+  "env": {
+    "JAVA_OPTS": {
+      "value": "-Dspring.profiles.active=simple"
+    },
+    "SPRING_APPLICATION_NAME": {
+      "value": "Some manifest name"
+    },
+    "APP_PROPERTY_INSIDE": {
+      "value": "predefined inside value in the manifest file"
+    },
+    "APP_PROPERTY_SYS": {
+      "description": "Password for the admin interface.",
+      "generator": "secret"
+    }
+  }
+}
+```
+
+
+
