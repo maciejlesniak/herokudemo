@@ -1,0 +1,21 @@
+{
+  "name": "Heroku demo app",
+  "description": "Heroku demo application with 2 spring profiles: simple and static",
+  "website": "",
+  "success_url": "/app",
+  "env": {
+    "JAVA_OPTS": {
+      "value": "-Dspring.profiles.active=simple"
+    },
+    "SPRING_APPLICATION_NAME": {
+      "value": "Some manifest name"
+    },
+    "APP_PROPERTY_INSIDE": {
+      "value": "predefined inside value in the manifest file"
+    },
+    "APP_PROPERTY_SYS": {
+      "description": "Password for the admin interface.",
+      "generator": "secret"
+    }
+  }
+}
